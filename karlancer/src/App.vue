@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     encryptData() {
-      this.pvtData = this.list.join();
       if (this.pvtData.length) {
         // hash the name with any algorithm
 
