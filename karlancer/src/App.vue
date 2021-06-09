@@ -1,20 +1,13 @@
 <template>
-  <div class="main">
-    <!-- <textarea v-model="pvtData" placeholder="Enter a string" /> <br />
-     -->
-
-    <div v-for="item in list" :key="item.id">
-      <textarea v-model="item.value"></textarea>
-      <br />
+  <div
+    class="h-screen w-screen flex justify-center place-items-center bg-gray-200"
+  >
+    <div class="flex flex-col h-64 text-center w-1/2 shadow-2xl bg-yellow-400">
+      <input class="h-24 bg-gray-200" type="text" placeholder="enter ..." />
+      <div>
+        <p class="p-3">14cDkzj8nBTiRhuEKsBav3pDNV52kQqg4B</p>
+      </div>
     </div>
-
-    <button @click="encryptData">Encrypt</button>
-    <button @click="decryptData">Decrypt</button>
-    <button @click="deleteData">Delete</button>
-
-    List by breaks: {{ listByBreaks }}
-
-    encData: {{ encData}}
   </div>
 </template>
 
@@ -23,9 +16,9 @@ export default {
   name: "App",
   data() {
     return {
-      pvtData: "",
-      secret: "123#$%",
-      encData: "",
+      secret:
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+      encData: [],
       list: [
         {
           id: 1,
@@ -41,43 +34,27 @@ export default {
       });
     },
   },
+  mounted() {
+    console.log(this.listByBreaks);
+  },
   methods: {
-    encryptData() {
-      if (this.pvtData.length) {
-        // hash the name with any algorithm
+    start() {
+      this.listByBreaks.forEach((item) => {
+        item.forEach((e) => {
+          this.encryptData(e);
+        });
+      });
+    },
 
-        const data = this.CryptoJS.AES.encrypt(
-          this.pvtData,
-          this.secret
-        ).toString();
+    encryptData(e) {
+      if (this.list.length) {
+        // hash the name with any algorithm
+        const data = this.CryptoJS.AES.encrypt(e, this.secret).toString();
 
         // store into localStorage
         localStorage.setItem("secretData", data);
-
-        // display the encrypted data
-        this.getEncryptedData();
+        return this.encData.push(data);
       }
-    },
-
-    decryptData() {
-      // get data from localStorage
-      const secretData = localStorage.getItem("secretData");
-
-      // decrypt the data and convert to string
-      const decryptData = this.CryptoJS.AES.decrypt(
-        secretData,
-        this.secret
-      ).toString(this.CryptoJS.enc.Utf8);
-
-      alert("Decrypted private data: " + decryptData);
-    },
-
-    deleteData() {
-      // remove data from localStorage
-      localStorage.removeItem("secretData");
-
-      // update text
-      this.getEncryptedData();
     },
 
     getEncryptedData() {
@@ -88,7 +65,7 @@ export default {
 };
 </script>
 
-<style>
+<style src="./assets/css/tailwind.css">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
